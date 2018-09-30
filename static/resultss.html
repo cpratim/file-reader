@@ -1,0 +1,316 @@
+<!DOCTYPE html><html>
+<head>
+<title></title>
+<style type="text/css">
+<!--
+.xflip {
+    -moz-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: fliph;
+}
+.yflip {
+    -moz-transform: scaleY(-1);
+    -webkit-transform: scaleY(-1);
+    -o-transform: scaleY(-1);
+    transform: scaleY(-1);
+    filter: flipv;
+}
+.xyflip {
+    -moz-transform: scaleX(-1) scaleY(-1);
+    -webkit-transform: scaleX(-1) scaleY(-1);
+    -o-transform: scaleX(-1) scaleY(-1);
+    transform: scaleX(-1) scaleY(-1);
+    filter: fliph + flipv;
+}
+-->
+</style>
+</head>
+<body>
+<a name=1></a><b>Bitcoin:&#160;A&#160;Peer-to-Peer&#160;Electronic&#160;Cash&#160;System</b><br/>
+Satoshi&#160;Nakamoto<br/>
+satoshin@gmx.com<br/>
+www.bitcoin.org<br/>
+<b>Abstract.</b>&#160;&#160;&#160;A&#160;purely&#160;&#160;peer-to-peer&#160;&#160;version&#160;&#160;of&#160;&#160;&#160;electronic&#160;&#160;cash&#160;&#160;&#160;would&#160;&#160;&#160;allow&#160;&#160;online&#160;<br/>payments&#160;to&#160;be&#160;sent&#160;directly&#160;from&#160;one&#160;party&#160;to&#160;another&#160;without&#160;going&#160;through&#160;a&#160;<br/>financial&#160;institution.&#160;&#160;&#160;Digital&#160;signatures&#160;provide&#160;part&#160;of&#160;the&#160;solution,&#160;but&#160;the&#160;main&#160;<br/>benefits&#160;are&#160;lost&#160;if&#160;a&#160;trusted&#160;third&#160;party&#160;is&#160;still&#160;required&#160;to&#160;prevent&#160;double-spending.&#160;<br/>We&#160;propose&#160;a&#160;solution&#160;to&#160;the&#160;double-spending&#160;problem&#160;using&#160;a&#160;peer-to-peer&#160;network.&#160;<br/>The&#160;network&#160;timestamps&#160;transactions&#160;by&#160;hashing&#160;them&#160;into&#160;an&#160;ongoing&#160;chain&#160;of&#160;<br/>hash-based&#160;proof-of-work,&#160;forming&#160;a&#160;record&#160;that&#160;cannot&#160;be&#160;changed&#160;without&#160;redoing&#160;<br/>the&#160;proof-of-work.&#160;&#160;The&#160;longest&#160;chain&#160;not&#160;only&#160;serves&#160;as&#160;proof&#160;of&#160;the&#160;sequence&#160;of&#160;<br/>events&#160;witnessed,&#160;but&#160;proof&#160;that&#160;it&#160;came&#160;from&#160;the&#160;largest&#160;pool&#160;of&#160;CPU&#160;power.&#160;&#160;&#160;As&#160;<br/>long&#160;as&#160;a&#160;majority&#160;of&#160;CPU&#160;power&#160;is&#160;controlled&#160;by&#160;nodes&#160;that&#160;are&#160;not&#160;cooperating&#160;to&#160;<br/>attack&#160;the&#160;network,&#160;they'll&#160;generate&#160;the&#160;longest&#160;chain&#160;and&#160;outpace&#160;attackers.&#160;&#160;&#160;The&#160;<br/>network&#160;itself&#160;requires&#160;minimal&#160;structure.&#160;&#160;Messages&#160;are&#160;broadcast&#160;on&#160;a&#160;best&#160;effort&#160;<br/>basis,&#160;and&#160;nodes&#160;can&#160;leave&#160;and&#160;rejoin&#160;the&#160;network&#160;at&#160;will,&#160;accepting&#160;the&#160;longest&#160;<br/>proof-of-work&#160;chain&#160;as&#160;proof&#160;of&#160;what&#160;happened&#160;while&#160;they&#160;were&#160;gone.<br/>
+<b>1.</b><br/>
+<b>Introduction</b><br/>
+Commerce&#160;on&#160;the&#160;Internet&#160;has&#160;come&#160;to&#160;rely&#160;almost&#160;exclusively&#160;on&#160;financial&#160;institutions&#160;serving&#160;as&#160;<br/>trusted&#160;third&#160;parties&#160;to&#160;process&#160;electronic&#160;payments.&#160;&#160;&#160;While&#160;the&#160;system&#160;works&#160;well&#160;enough&#160;for&#160;<br/>most&#160;&#160;&#160;transactions,&#160;&#160;&#160;it&#160;&#160;&#160;still&#160;&#160;&#160;suffers&#160;&#160;&#160;from&#160;&#160;&#160;the&#160;&#160;&#160;inherent&#160;&#160;&#160;weaknesses&#160;&#160;&#160;of&#160;&#160;&#160;the&#160;&#160;&#160;trust&#160;&#160;&#160;based&#160;&#160;&#160;model.&#160;<br/>Completely&#160;non-reversible&#160;transactions&#160;are&#160;not&#160;really&#160;possible,&#160;since&#160;financial&#160;institutions&#160;cannot&#160;<br/>avoid&#160;&#160;&#160;mediating&#160;&#160;&#160;disputes.&#160;&#160;&#160;&#160;&#160;The&#160;&#160;&#160;cost&#160;&#160;&#160;of&#160;&#160;&#160;mediation&#160;&#160;&#160;increases&#160;&#160;&#160;transaction&#160;&#160;&#160;costs,&#160;&#160;&#160;limiting&#160;&#160;&#160;the&#160;<br/>minimum&#160;practical&#160;transaction&#160;size&#160;and&#160;cutting&#160;off&#160;the&#160;possibility&#160;for&#160;small&#160;casual&#160;transactions,&#160;<br/>and&#160;&#160;there&#160;&#160;&#160;is&#160;a&#160;&#160;broader&#160;&#160;cost&#160;in&#160;&#160;the&#160;&#160;&#160;loss&#160;&#160;of&#160;ability&#160;&#160;to&#160;&#160;&#160;make&#160;&#160;&#160;non-reversible&#160;&#160;payments&#160;&#160;for&#160;&#160;non-<br/>reversible&#160;services.&#160;&#160;With&#160;the&#160;possibility&#160;of&#160;reversal,&#160;the&#160;need&#160;for&#160;trust&#160;spreads.&#160;&#160;Merchants&#160;must&#160;<br/>be&#160;wary&#160;of&#160;their&#160;customers,&#160;hassling&#160;them&#160;for&#160;more&#160;information&#160;than&#160;they&#160;would&#160;otherwise&#160;need.&#160;<br/>A&#160;certain&#160;percentage&#160;of&#160;fraud&#160;is&#160;accepted&#160;as&#160;unavoidable.&#160;&#160;These&#160;costs&#160;and&#160;payment&#160;uncertainties&#160;<br/>can&#160;be&#160;avoided&#160;in&#160;person&#160;by&#160;using&#160;physical&#160;currency,&#160;but&#160;no&#160;mechanism&#160;exists&#160;to&#160;make&#160;payments&#160;<br/>over&#160;a&#160;communications&#160;channel&#160;without&#160;a&#160;trusted&#160;party.<br/>
+What&#160;is&#160;needed&#160;is&#160;an&#160;electronic&#160;payment&#160;system&#160;based&#160;on&#160;cryptographic&#160;proof&#160;instead&#160;of&#160;trust,&#160;<br/>
+allowing&#160;any&#160;two&#160;willing&#160;parties&#160;to&#160;transact&#160;directly&#160;with&#160;each&#160;other&#160;without&#160;the&#160;need&#160;for&#160;a&#160;trusted&#160;<br/>third&#160;party.&#160;&#160;&#160;Transactions&#160;that&#160;are&#160;computationally&#160;impractical&#160;to&#160;reverse&#160;would&#160;protect&#160;sellers&#160;<br/>from&#160;fraud,&#160;and&#160;routine&#160;escrow&#160;mechanisms&#160;could&#160;easily&#160;be&#160;implemented&#160;to&#160;protect&#160;buyers.&#160;&#160;In&#160;<br/>this&#160;paper,&#160;we&#160;propose&#160;a&#160;solution&#160;to&#160;the&#160;double-spending&#160;problem&#160;using&#160;a&#160;peer-to-peer&#160;distributed&#160;<br/>timestamp&#160;server&#160;to&#160;generate&#160;computational&#160;proof&#160;of&#160;the&#160;chronological&#160;order&#160;of&#160;transactions.&#160;&#160;The&#160;<br/>system&#160;&#160;&#160;is&#160;&#160;&#160;secure&#160;&#160;&#160;as&#160;&#160;&#160;long&#160;&#160;&#160;as&#160;&#160;&#160;honest&#160;&#160;&#160;nodes&#160;&#160;&#160;collectively&#160;&#160;&#160;control&#160;&#160;&#160;more&#160;&#160;&#160;CPU&#160;&#160;&#160;power&#160;&#160;&#160;than&#160;&#160;&#160;any&#160;<br/>cooperating&#160;group&#160;of&#160;attacker&#160;nodes.<br/>
+1<br/>
+<hr/>
+<a name=2></a><b>2.</b><br/>
+<b>Transactions</b><br/>
+We&#160;define&#160;an&#160;electronic&#160;coin&#160;as&#160;a&#160;chain&#160;of&#160;digital&#160;signatures.&#160;&#160;Each&#160;owner&#160;transfers&#160;the&#160;coin&#160;to&#160;the&#160;<br/>next&#160;by&#160;digitally&#160;signing&#160;a&#160;hash&#160;of&#160;the&#160;previous&#160;transaction&#160;and&#160;the&#160;public&#160;key&#160;of&#160;the&#160;next&#160;owner&#160;<br/>and&#160;adding&#160;these&#160;to&#160;the&#160;end&#160;of&#160;the&#160;coin.&#160;&#160;A&#160;payee&#160;can&#160;verify&#160;the&#160;signatures&#160;to&#160;verify&#160;the&#160;chain&#160;of&#160;<br/>ownership.<br/>
+Transaction<br/>
+Transaction<br/>
+Transaction<br/>
+Owner&#160;1's<br/>
+Owner&#160;2's<br/>
+Owner&#160;3's<br/>
+Public&#160;Key<br/>
+Public&#160;Key<br/>
+Public&#160;Key<br/>
+Hash<br/>
+Hash<br/>
+Hash<br/>
+&#160;Ve<br/>
+&#160;<br/>
+r<br/>
+V<br/>
+if<br/>
+e<br/>
+y<br/>
+rify<br/>
+Owner&#160;0's<br/>
+Owner&#160;1's<br/>
+Owner&#160;2's<br/>
+Signature<br/>
+Signature<br/>
+Signature<br/>
+Sign&#160;<br/>
+Sign&#160;&#160;<br/>
+Owner&#160;1's<br/>
+Owner&#160;2's<br/>
+Owner&#160;3's<br/>
+Private&#160;Key<br/>
+Private&#160;Key<br/>
+Private&#160;Key<br/>
+The&#160;problem&#160;of&#160;course&#160;is&#160;the&#160;payee&#160;can't&#160;verify&#160;that&#160;one&#160;of&#160;the&#160;owners&#160;did&#160;not&#160;double-spend&#160;<br/>
+the&#160;coin.&#160;&#160;A&#160;common&#160;solution&#160;is&#160;to&#160;introduce&#160;a&#160;trusted&#160;central&#160;authority,&#160;or&#160;mint,&#160;that&#160;checks&#160;every&#160;<br/>transaction&#160;for&#160;double&#160;spending.&#160;&#160;After&#160;each&#160;transaction,&#160;the&#160;coin&#160;must&#160;be&#160;returned&#160;to&#160;the&#160;mint&#160;to&#160;<br/>issue&#160;a&#160;new&#160;coin,&#160;and&#160;only&#160;coins&#160;issued&#160;directly&#160;from&#160;the&#160;mint&#160;are&#160;trusted&#160;not&#160;to&#160;be&#160;double-spent.&#160;<br/>The&#160;&#160;&#160;problem&#160;&#160;with&#160;&#160;this&#160;&#160;&#160;solution&#160;&#160;is&#160;&#160;&#160;that&#160;&#160;&#160;the&#160;&#160;fate&#160;&#160;&#160;of&#160;&#160;&#160;the&#160;&#160;&#160;entire&#160;&#160;money&#160;&#160;&#160;system&#160;&#160;&#160;depends&#160;&#160;&#160;on&#160;&#160;&#160;the&#160;<br/>company&#160;running&#160;the&#160;mint,&#160;with&#160;every&#160;transaction&#160;having&#160;to&#160;go&#160;through&#160;them,&#160;just&#160;like&#160;a&#160;bank.<br/>
+We&#160;need&#160;a&#160;way&#160;for&#160;the&#160;payee&#160;to&#160;know&#160;that&#160;the&#160;previous&#160;owners&#160;did&#160;not&#160;sign&#160;any&#160;earlier&#160;<br/>
+transactions.&#160;&#160;For&#160;our&#160;purposes,&#160;the&#160;earliest&#160;transaction&#160;is&#160;the&#160;one&#160;that&#160;counts,&#160;so&#160;we&#160;don't&#160;care&#160;<br/>about&#160;later&#160;attempts&#160;to&#160;double-spend.&#160;&#160;The&#160;only&#160;way&#160;to&#160;confirm&#160;the&#160;absence&#160;of&#160;a&#160;transaction&#160;is&#160;to&#160;<br/>be&#160;aware&#160;of&#160;all&#160;transactions.&#160;&#160;In&#160;the&#160;mint&#160;based&#160;model,&#160;the&#160;mint&#160;was&#160;aware&#160;of&#160;all&#160;transactions&#160;and&#160;<br/>decided&#160;which&#160;arrived&#160;first.&#160;&#160;&#160;To&#160;accomplish&#160;this&#160;without&#160;a&#160;trusted&#160;party,&#160;transactions&#160;must&#160;be&#160;<br/>publicly&#160;announced&#160;[1],&#160;and&#160;we&#160;need&#160;a&#160;system&#160;for&#160;participants&#160;to&#160;agree&#160;on&#160;a&#160;single&#160;history&#160;of&#160;the&#160;<br/>order&#160;in&#160;which&#160;they&#160;were&#160;received.&#160;&#160;The&#160;payee&#160;needs&#160;proof&#160;that&#160;at&#160;the&#160;time&#160;of&#160;each&#160;transaction,&#160;the&#160;<br/>majority&#160;of&#160;nodes&#160;agreed&#160;it&#160;was&#160;the&#160;first&#160;received.&#160;<br/>
+<b>3.</b><br/>
+<b>Timestamp&#160;Server</b><br/>
+The&#160;solution&#160;we&#160;propose&#160;begins&#160;with&#160;a&#160;timestamp&#160;server.&#160;&#160;A&#160;timestamp&#160;server&#160;works&#160;by&#160;taking&#160;a&#160;<br/>hash&#160;&#160;&#160;of&#160;&#160;&#160;a&#160;&#160;&#160;block&#160;&#160;&#160;of&#160;&#160;&#160;items&#160;&#160;&#160;to&#160;&#160;&#160;be&#160;&#160;&#160;timestamped&#160;&#160;&#160;and&#160;&#160;&#160;widely&#160;&#160;&#160;publishing&#160;&#160;&#160;the&#160;&#160;&#160;hash,&#160;&#160;&#160;such&#160;&#160;&#160;as&#160;&#160;&#160;in&#160;&#160;&#160;a&#160;<br/>newspaper&#160;or&#160;Usenet&#160;post&#160;[2-5].&#160;&#160;&#160;The&#160;timestamp&#160;proves&#160;that&#160;the&#160;data&#160;must&#160;have&#160;existed&#160;at&#160;the&#160;<br/>time,&#160;obviously,&#160;in&#160;order&#160;to&#160;get&#160;into&#160;the&#160;hash.&#160;&#160;Each&#160;timestamp&#160;includes&#160;the&#160;previous&#160;timestamp&#160;in&#160;<br/>its&#160;hash,&#160;forming&#160;a&#160;chain,&#160;with&#160;each&#160;additional&#160;timestamp&#160;reinforcing&#160;the&#160;ones&#160;before&#160;it.<br/>
+Hash<br/>
+Hash<br/>
+Block<br/>
+Block<br/>
+Item<br/>
+Item<br/>
+...<br/>
+Item<br/>
+Item<br/>
+...<br/>
+2<br/>
+<hr/>
+<a name=3></a><b>4.</b><br/>
+<b>Proof-of-Work</b><br/>
+To&#160;implement&#160;a&#160;distributed&#160;timestamp&#160;server&#160;on&#160;a&#160;peer-to-peer&#160;basis,&#160;we&#160;will&#160;need&#160;to&#160;use&#160;a&#160;proof-<br/>of-work&#160;system&#160;similar&#160;to&#160;Adam&#160;Back's&#160;Hashcash&#160;[6],&#160;rather&#160;than&#160;newspaper&#160;or&#160;Usenet&#160;posts.&#160;<br/>The&#160;proof-of-work&#160;involves&#160;scanning&#160;for&#160;a&#160;value&#160;that&#160;when&#160;hashed,&#160;such&#160;as&#160;with&#160;SHA-256,&#160;the&#160;<br/>hash&#160;begins&#160;with&#160;a&#160;number&#160;of&#160;zero&#160;bits.&#160;&#160;The&#160;average&#160;work&#160;required&#160;is&#160;exponential&#160;in&#160;the&#160;number&#160;<br/>of&#160;zero&#160;bits&#160;required&#160;and&#160;can&#160;be&#160;verified&#160;by&#160;executing&#160;a&#160;single&#160;hash.<br/>
+For&#160;our&#160;timestamp&#160;network,&#160;we&#160;implement&#160;the&#160;proof-of-work&#160;by&#160;incrementing&#160;a&#160;nonce&#160;in&#160;the&#160;<br/>
+block&#160;until&#160;a&#160;value&#160;is&#160;found&#160;that&#160;gives&#160;the&#160;block's&#160;hash&#160;the&#160;required&#160;zero&#160;bits.&#160;&#160;&#160;Once&#160;the&#160;CPU&#160;<br/>effort&#160;has&#160;been&#160;expended&#160;to&#160;make&#160;it&#160;satisfy&#160;the&#160;proof-of-work,&#160;the&#160;block&#160;cannot&#160;be&#160;changed&#160;<br/>without&#160;redoing&#160;the&#160;work.&#160;&#160;&#160;As&#160;later&#160;blocks&#160;are&#160;chained&#160;after&#160;it,&#160;the&#160;work&#160;to&#160;change&#160;the&#160;block&#160;<br/>would&#160;include&#160;redoing&#160;all&#160;the&#160;blocks&#160;after&#160;it.<br/>
+Block<br/>
+Block<br/>
+Prev&#160;Hash<br/>
+Nonce<br/>
+Prev&#160;Hash<br/>
+Nonce<br/>
+Tx<br/>
+Tx<br/>
+...<br/>
+Tx<br/>
+Tx<br/>
+...<br/>
+The&#160;proof-of-work&#160;also&#160;solves&#160;the&#160;problem&#160;of&#160;determining&#160;representation&#160;in&#160;majority&#160;decision&#160;<br/>
+making.&#160;&#160;If&#160;the&#160;majority&#160;were&#160;based&#160;on&#160;one-IP-address-one-vote,&#160;it&#160;could&#160;be&#160;subverted&#160;by&#160;anyone&#160;<br/>able&#160;&#160;&#160;to&#160;&#160;&#160;allocate&#160;&#160;&#160;many&#160;&#160;&#160;IPs.&#160;&#160;&#160;&#160;&#160;Proof-of-work&#160;&#160;&#160;is&#160;&#160;&#160;essentially&#160;&#160;&#160;one-CPU-one-vote.&#160;&#160;&#160;&#160;&#160;The&#160;&#160;&#160;majority&#160;<br/>decision&#160;is&#160;represented&#160;by&#160;the&#160;longest&#160;chain,&#160;which&#160;has&#160;the&#160;greatest&#160;proof-of-work&#160;effort&#160;invested&#160;<br/>in&#160;it.&#160;&#160;If&#160;a&#160;majority&#160;of&#160;CPU&#160;power&#160;is&#160;controlled&#160;by&#160;honest&#160;nodes,&#160;the&#160;honest&#160;chain&#160;will&#160;grow&#160;the&#160;<br/>fastest&#160;and&#160;outpace&#160;any&#160;competing&#160;chains.&#160;&#160;&#160;To&#160;modify&#160;a&#160;past&#160;block,&#160;an&#160;attacker&#160;would&#160;have&#160;to&#160;<br/>redo&#160;the&#160;proof-of-work&#160;of&#160;the&#160;block&#160;and&#160;all&#160;blocks&#160;after&#160;it&#160;and&#160;then&#160;catch&#160;up&#160;with&#160;and&#160;surpass&#160;the&#160;<br/>work&#160;of&#160;the&#160;honest&#160;nodes.&#160;&#160;We&#160;will&#160;show&#160;later&#160;that&#160;the&#160;probability&#160;of&#160;a&#160;slower&#160;attacker&#160;catching&#160;up&#160;<br/>diminishes&#160;exponentially&#160;as&#160;subsequent&#160;blocks&#160;are&#160;added.<br/>
+To&#160;compensate&#160;for&#160;increasing&#160;hardware&#160;speed&#160;and&#160;varying&#160;interest&#160;in&#160;running&#160;nodes&#160;over&#160;time,&#160;<br/>
+the&#160;proof-of-work&#160;difficulty&#160;is&#160;determined&#160;by&#160;a&#160;moving&#160;average&#160;targeting&#160;an&#160;average&#160;number&#160;of&#160;<br/>blocks&#160;per&#160;hour.&#160;&#160;If&#160;they're&#160;generated&#160;too&#160;fast,&#160;the&#160;difficulty&#160;increases.<br/>
+<b>5.</b><br/>
+<b>Network</b><br/>
+The&#160;steps&#160;to&#160;run&#160;the&#160;network&#160;are&#160;as&#160;follows:<br/>
+1)&#160;New&#160;transactions&#160;are&#160;broadcast&#160;to&#160;all&#160;nodes.<br/>2)&#160;Each&#160;node&#160;collects&#160;new&#160;transactions&#160;into&#160;a&#160;block.&#160;&#160;<br/>3)&#160;Each&#160;node&#160;works&#160;on&#160;finding&#160;a&#160;difficult&#160;proof-of-work&#160;for&#160;its&#160;block.<br/>4)&#160;When&#160;a&#160;node&#160;finds&#160;a&#160;proof-of-work,&#160;it&#160;broadcasts&#160;the&#160;block&#160;to&#160;all&#160;nodes.<br/>5)&#160;Nodes&#160;accept&#160;the&#160;block&#160;only&#160;if&#160;all&#160;transactions&#160;in&#160;it&#160;are&#160;valid&#160;and&#160;not&#160;already&#160;spent.<br/>6)&#160;Nodes&#160;express&#160;their&#160;acceptance&#160;of&#160;the&#160;block&#160;by&#160;working&#160;on&#160;creating&#160;the&#160;next&#160;block&#160;in&#160;the&#160;<br/>
+chain,&#160;using&#160;the&#160;hash&#160;of&#160;the&#160;accepted&#160;block&#160;as&#160;the&#160;previous&#160;hash.<br/>
+Nodes&#160;always&#160;consider&#160;the&#160;longest&#160;chain&#160;to&#160;be&#160;the&#160;correct&#160;one&#160;and&#160;will&#160;keep&#160;working&#160;on&#160;<br/>
+extending&#160;it.&#160;&#160;If&#160;two&#160;nodes&#160;broadcast&#160;different&#160;versions&#160;of&#160;the&#160;next&#160;block&#160;simultaneously,&#160;some&#160;<br/>nodes&#160;may&#160;receive&#160;one&#160;or&#160;the&#160;other&#160;first.&#160;&#160;In&#160;that&#160;case,&#160;they&#160;work&#160;on&#160;the&#160;first&#160;one&#160;they&#160;received,&#160;<br/>but&#160;save&#160;the&#160;other&#160;branch&#160;in&#160;case&#160;it&#160;becomes&#160;longer.&#160;&#160;The&#160;tie&#160;will&#160;be&#160;broken&#160;when&#160;the&#160;next&#160;proof-<br/>of-work&#160;is&#160;found&#160;and&#160;one&#160;branch&#160;becomes&#160;longer;&#160;the&#160;nodes&#160;that&#160;were&#160;working&#160;on&#160;the&#160;other&#160;<br/>branch&#160;will&#160;then&#160;switch&#160;to&#160;the&#160;longer&#160;one.<br/>
+3<br/>
+<hr/>
+<a name=4></a>New&#160;transaction&#160;broadcasts&#160;do&#160;not&#160;necessarily&#160;need&#160;to&#160;reach&#160;all&#160;nodes.&#160;&#160;As&#160;long&#160;as&#160;they&#160;reach&#160;<br/>
+many&#160;nodes,&#160;they&#160;will&#160;get&#160;into&#160;a&#160;block&#160;before&#160;long.&#160;&#160;Block&#160;broadcasts&#160;are&#160;also&#160;tolerant&#160;of&#160;dropped&#160;<br/>messages.&#160;&#160;If&#160;a&#160;node&#160;does&#160;not&#160;receive&#160;a&#160;block,&#160;it&#160;will&#160;request&#160;it&#160;when&#160;it&#160;receives&#160;the&#160;next&#160;block&#160;and&#160;<br/>realizes&#160;it&#160;missed&#160;one.<br/>
+<b>6.</b><br/>
+<b>Incentive</b><br/>
+By&#160;convention,&#160;the&#160;first&#160;transaction&#160;in&#160;a&#160;block&#160;is&#160;a&#160;special&#160;transaction&#160;that&#160;starts&#160;a&#160;new&#160;coin&#160;owned&#160;<br/>by&#160;the&#160;creator&#160;of&#160;the&#160;block.&#160;&#160;This&#160;adds&#160;an&#160;incentive&#160;for&#160;nodes&#160;to&#160;support&#160;the&#160;network,&#160;and&#160;provides&#160;<br/>a&#160;way&#160;to&#160;initially&#160;distribute&#160;coins&#160;into&#160;circulation,&#160;since&#160;there&#160;is&#160;no&#160;central&#160;authority&#160;to&#160;issue&#160;them.&#160;<br/>The&#160;steady&#160;addition&#160;of&#160;a&#160;constant&#160;of&#160;amount&#160;of&#160;new&#160;coins&#160;is&#160;analogous&#160;to&#160;gold&#160;miners&#160;expending&#160;<br/>resources&#160;to&#160;add&#160;gold&#160;to&#160;circulation.&#160;&#160;In&#160;our&#160;case,&#160;it&#160;is&#160;CPU&#160;time&#160;and&#160;electricity&#160;that&#160;is&#160;expended.<br/>
+The&#160;incentive&#160;can&#160;also&#160;be&#160;funded&#160;with&#160;transaction&#160;fees.&#160;&#160;If&#160;the&#160;output&#160;value&#160;of&#160;a&#160;transaction&#160;is&#160;<br/>
+less&#160;than&#160;its&#160;input&#160;value,&#160;the&#160;difference&#160;is&#160;a&#160;transaction&#160;fee&#160;that&#160;is&#160;added&#160;to&#160;the&#160;incentive&#160;value&#160;of&#160;<br/>the&#160;&#160;&#160;block&#160;&#160;&#160;containing&#160;&#160;&#160;the&#160;&#160;&#160;transaction.&#160;&#160;&#160;&#160;&#160;Once&#160;&#160;&#160;a&#160;&#160;&#160;predetermined&#160;&#160;&#160;number&#160;&#160;&#160;of&#160;&#160;&#160;coins&#160;&#160;&#160;have&#160;&#160;&#160;entered&#160;<br/>circulation,&#160;the&#160;incentive&#160;can&#160;transition&#160;entirely&#160;to&#160;transaction&#160;fees&#160;and&#160;be&#160;completely&#160;inflation&#160;<br/>free.<br/>
+The&#160;incentive&#160;may&#160;help&#160;encourage&#160;nodes&#160;to&#160;stay&#160;honest.&#160;&#160;&#160;If&#160;a&#160;greedy&#160;attacker&#160;is&#160;able&#160;to&#160;<br/>
+assemble&#160;more&#160;CPU&#160;power&#160;than&#160;all&#160;the&#160;honest&#160;nodes,&#160;he&#160;would&#160;have&#160;to&#160;choose&#160;between&#160;using&#160;it&#160;<br/>to&#160;defraud&#160;people&#160;by&#160;stealing&#160;back&#160;his&#160;payments,&#160;or&#160;using&#160;it&#160;to&#160;generate&#160;new&#160;coins.&#160;&#160;He&#160;ought&#160;to&#160;<br/>find&#160;it&#160;more&#160;profitable&#160;to&#160;play&#160;by&#160;the&#160;rules,&#160;such&#160;rules&#160;that&#160;favour&#160;him&#160;with&#160;more&#160;new&#160;coins&#160;than&#160;<br/>everyone&#160;else&#160;combined,&#160;than&#160;to&#160;undermine&#160;the&#160;system&#160;and&#160;the&#160;validity&#160;of&#160;his&#160;own&#160;wealth.<br/>
+<b>7.</b><br/>
+<b>Reclaiming&#160;Disk&#160;Space</b><br/>
+Once&#160;the&#160;latest&#160;transaction&#160;in&#160;a&#160;coin&#160;is&#160;buried&#160;under&#160;enough&#160;blocks,&#160;the&#160;spent&#160;transactions&#160;before&#160;<br/>it&#160;can&#160;be&#160;discarded&#160;to&#160;save&#160;disk&#160;space.&#160;&#160;&#160;To&#160;facilitate&#160;this&#160;without&#160;breaking&#160;the&#160;block's&#160;hash,&#160;<br/>transactions&#160;are&#160;hashed&#160;in&#160;a&#160;Merkle&#160;Tree&#160;[7][2][5],&#160;with&#160;only&#160;the&#160;root&#160;included&#160;in&#160;the&#160;block's&#160;hash.&#160;<br/>Old&#160;blocks&#160;can&#160;then&#160;be&#160;compacted&#160;by&#160;stubbing&#160;off&#160;branches&#160;of&#160;the&#160;tree.&#160;&#160;The&#160;interior&#160;hashes&#160;do&#160;<br/>not&#160;need&#160;to&#160;be&#160;stored.<br/>
+Block<br/>
+Block<br/>
+Block&#160;Header&#160;(Block&#160;Hash)<br/>
+Block&#160;Header&#160;(Block&#160;Hash)<br/>
+Prev&#160;Hash<br/>
+Nonce<br/>
+Prev&#160;Hash<br/>
+Nonce<br/>
+Root&#160;Hash<br/>
+Root&#160;Hash<br/>
+Hash01<br/>
+Hash23<br/>
+Hash01<br/>
+Hash23<br/>
+Hash0<br/>
+Hash1<br/>
+Hash2<br/>
+Hash3<br/>
+Hash2<br/>
+Hash3<br/>
+Tx0<br/>
+Tx1<br/>
+Tx2<br/>
+Tx3<br/>
+Tx3<br/>
+Transactions&#160;Hashed&#160;in&#160;a&#160;Merkle&#160;Tree<br/>
+After&#160;Pruning&#160;Tx0-2&#160;from&#160;the&#160;Block<br/>
+A&#160;block&#160;header&#160;with&#160;no&#160;transactions&#160;would&#160;be&#160;about&#160;80&#160;bytes.&#160;&#160;&#160;If&#160;we&#160;suppose&#160;blocks&#160;are&#160;<br/>
+generated&#160;every&#160;10&#160;minutes,&#160;80&#160;bytes&#160;*&#160;6&#160;*&#160;24&#160;*&#160;365&#160;=&#160;4.2MB&#160;per&#160;year.&#160;&#160;With&#160;computer&#160;systems&#160;<br/>typically&#160;selling&#160;with&#160;2GB&#160;of&#160;RAM&#160;as&#160;of&#160;2008,&#160;and&#160;Moore's&#160;Law&#160;predicting&#160;current&#160;growth&#160;of&#160;<br/>1.2GB&#160;per&#160;year,&#160;storage&#160;should&#160;not&#160;be&#160;a&#160;problem&#160;even&#160;if&#160;the&#160;block&#160;headers&#160;must&#160;be&#160;kept&#160;in&#160;<br/>memory.<br/>
+4<br/>
+<hr/>
+<a name=5></a><b>8.</b><br/>
+<b>Simplified&#160;Payment&#160;Verification</b><br/>
+It&#160;is&#160;possible&#160;to&#160;verify&#160;payments&#160;without&#160;running&#160;a&#160;full&#160;network&#160;node.&#160;&#160;A&#160;user&#160;only&#160;needs&#160;to&#160;keep&#160;<br/>a&#160;copy&#160;of&#160;the&#160;block&#160;headers&#160;of&#160;the&#160;longest&#160;proof-of-work&#160;chain,&#160;which&#160;he&#160;can&#160;get&#160;by&#160;querying&#160;<br/>network&#160;&#160;&#160;nodes&#160;until&#160;he's&#160;&#160;convinced&#160;&#160;he&#160;&#160;has&#160;&#160;the&#160;&#160;&#160;longest&#160;&#160;chain,&#160;&#160;and&#160;&#160;obtain&#160;&#160;&#160;the&#160;&#160;Merkle&#160;&#160;branch&#160;<br/>linking&#160;&#160;the&#160;&#160;transaction&#160;&#160;to&#160;&#160;&#160;the&#160;&#160;&#160;block&#160;&#160;&#160;it's&#160;&#160;&#160;timestamped&#160;&#160;&#160;in.&#160;&#160;&#160;&#160;He&#160;&#160;can't&#160;&#160;&#160;check&#160;&#160;&#160;the&#160;&#160;&#160;transaction&#160;&#160;&#160;for&#160;<br/>himself,&#160;but&#160;by&#160;linking&#160;it&#160;to&#160;a&#160;place&#160;in&#160;the&#160;chain,&#160;he&#160;can&#160;see&#160;that&#160;a&#160;network&#160;node&#160;has&#160;accepted&#160;it,&#160;<br/>and&#160;blocks&#160;added&#160;after&#160;it&#160;further&#160;confirm&#160;the&#160;network&#160;has&#160;accepted&#160;it.<br/>
+Longest&#160;Proof-of-Work&#160;Chain<br/>
+Block&#160;Header<br/>
+Block&#160;Header<br/>
+Block&#160;Header<br/>
+Prev&#160;Hash<br/>
+Nonce<br/>
+Prev&#160;Hash<br/>
+Nonce<br/>
+Prev&#160;Hash<br/>
+Nonce<br/>
+Merkle&#160;Root<br/>
+Merkle&#160;Root<br/>
+Merkle&#160;Root<br/>
+Hash01<br/>
+Hash23<br/>
+Merkle&#160;Branch&#160;for&#160;Tx3<br/>
+Hash2<br/>
+Hash3<br/>
+Tx3<br/>
+As&#160;such,&#160;the&#160;verification&#160;is&#160;reliable&#160;as&#160;long&#160;as&#160;honest&#160;nodes&#160;control&#160;the&#160;network,&#160;but&#160;is&#160;more&#160;<br/>
+vulnerable&#160;&#160;&#160;if&#160;&#160;&#160;the&#160;&#160;&#160;network&#160;&#160;&#160;is&#160;&#160;&#160;overpowered&#160;&#160;&#160;by&#160;&#160;&#160;an&#160;&#160;&#160;attacker.&#160;&#160;&#160;&#160;While&#160;&#160;&#160;network&#160;&#160;&#160;nodes&#160;&#160;&#160;can&#160;&#160;&#160;verify&#160;<br/>transactions&#160;&#160;for&#160;&#160;&#160;themselves,&#160;&#160;&#160;the&#160;&#160;simplified&#160;&#160;method&#160;&#160;&#160;can&#160;&#160;&#160;be&#160;&#160;&#160;fooled&#160;&#160;&#160;by&#160;&#160;an&#160;&#160;&#160;attacker's&#160;&#160;&#160;fabricated&#160;<br/>transactions&#160;for&#160;as&#160;long&#160;as&#160;the&#160;attacker&#160;can&#160;continue&#160;to&#160;overpower&#160;the&#160;network.&#160;&#160;One&#160;strategy&#160;to&#160;<br/>protect&#160;against&#160;this&#160;would&#160;be&#160;to&#160;accept&#160;alerts&#160;from&#160;network&#160;nodes&#160;when&#160;they&#160;detect&#160;an&#160;invalid&#160;<br/>block,&#160;&#160;&#160;prompting&#160;&#160;&#160;the&#160;&#160;&#160;user's&#160;&#160;&#160;software&#160;&#160;&#160;to&#160;&#160;&#160;download&#160;&#160;&#160;the&#160;&#160;&#160;full&#160;&#160;&#160;block&#160;&#160;&#160;and&#160;&#160;&#160;alerted&#160;&#160;&#160;transactions&#160;&#160;&#160;to&#160;<br/>confirm&#160;the&#160;inconsistency.&#160;&#160;Businesses&#160;that&#160;receive&#160;frequent&#160;payments&#160;will&#160;probably&#160;still&#160;want&#160;to&#160;<br/>run&#160;their&#160;own&#160;nodes&#160;for&#160;more&#160;independent&#160;security&#160;and&#160;quicker&#160;verification.<br/>
+<b>9.</b><br/>
+<b>Combining&#160;and&#160;Splitting&#160;Value</b><br/>
+Although&#160;it&#160;would&#160;be&#160;possible&#160;to&#160;handle&#160;coins&#160;individually,&#160;it&#160;would&#160;be&#160;unwieldy&#160;to&#160;make&#160;a&#160;<br/>separate&#160;&#160;transaction&#160;&#160;for&#160;&#160;every&#160;&#160;cent&#160;in&#160;&#160;a&#160;&#160;transfer.&#160;&#160;&#160;To&#160;&#160;allow&#160;value&#160;&#160;to&#160;&#160;be&#160;&#160;split&#160;&#160;and&#160;&#160;combined,&#160;<br/>transactions&#160;contain&#160;multiple&#160;inputs&#160;and&#160;outputs.&#160;&#160;&#160;Normally&#160;there&#160;will&#160;be&#160;either&#160;a&#160;single&#160;input&#160;<br/>from&#160;a&#160;larger&#160;previous&#160;transaction&#160;or&#160;multiple&#160;inputs&#160;combining&#160;smaller&#160;amounts,&#160;and&#160;at&#160;most&#160;two&#160;<br/>outputs:&#160;one&#160;for&#160;the&#160;payment,&#160;and&#160;one&#160;returning&#160;the&#160;change,&#160;if&#160;any,&#160;back&#160;to&#160;the&#160;sender.&#160;&#160;<br/>
+Transaction<br/>
+In<br/>
+Out<br/>
+In<br/>
+...<br/>
+...<br/>
+It&#160;should&#160;be&#160;noted&#160;that&#160;fan-out,&#160;where&#160;a&#160;transaction&#160;depends&#160;on&#160;several&#160;transactions,&#160;and&#160;those&#160;<br/>
+transactions&#160;depend&#160;on&#160;many&#160;more,&#160;is&#160;not&#160;a&#160;problem&#160;here.&#160;&#160;There&#160;is&#160;never&#160;the&#160;need&#160;to&#160;extract&#160;a&#160;<br/>complete&#160;standalone&#160;copy&#160;of&#160;a&#160;transaction's&#160;history.<br/>
+5<br/>
+<hr/>
+<a name=6></a><b>10.&#160;Privacy</b><br/>
+The&#160;traditional&#160;banking&#160;model&#160;achieves&#160;a&#160;level&#160;of&#160;privacy&#160;by&#160;limiting&#160;access&#160;to&#160;information&#160;to&#160;the&#160;<br/>parties&#160;involved&#160;and&#160;the&#160;trusted&#160;third&#160;party.&#160;&#160;The&#160;necessity&#160;to&#160;announce&#160;all&#160;transactions&#160;publicly&#160;<br/>precludes&#160;this&#160;method,&#160;but&#160;privacy&#160;can&#160;still&#160;be&#160;maintained&#160;by&#160;breaking&#160;the&#160;flow&#160;of&#160;information&#160;in&#160;<br/>another&#160;place:&#160;by&#160;keeping&#160;public&#160;keys&#160;anonymous.&#160;&#160;The&#160;public&#160;can&#160;see&#160;that&#160;someone&#160;is&#160;sending&#160;<br/>an&#160;amount&#160;to&#160;someone&#160;else,&#160;but&#160;without&#160;information&#160;linking&#160;the&#160;transaction&#160;to&#160;anyone.&#160;&#160;This&#160;is&#160;<br/>similar&#160;to&#160;the&#160;level&#160;of&#160;information&#160;released&#160;by&#160;stock&#160;exchanges,&#160;where&#160;the&#160;time&#160;and&#160;size&#160;of&#160;<br/>individual&#160;trades,&#160;the&#160;&#34;tape&#34;,&#160;is&#160;made&#160;public,&#160;but&#160;without&#160;telling&#160;who&#160;the&#160;parties&#160;were.<br/>
+Traditional&#160;Privacy&#160;Model<br/>
+Identities<br/>
+Transactions<br/>
+Trusted<br/>
+Counterparty<br/>
+Public<br/>
+Third&#160;Party<br/>
+New&#160;Privacy&#160;Model<br/>
+Identities<br/>
+Transactions<br/>
+Public<br/>
+As&#160;an&#160;additional&#160;firewall,&#160;a&#160;new&#160;key&#160;pair&#160;should&#160;be&#160;used&#160;for&#160;each&#160;transaction&#160;to&#160;keep&#160;them&#160;<br/>
+from&#160;&#160;being&#160;&#160;&#160;linked&#160;&#160;&#160;to&#160;&#160;&#160;a&#160;&#160;&#160;common&#160;&#160;&#160;owner.&#160;&#160;&#160;&#160;Some&#160;&#160;linking&#160;&#160;is&#160;&#160;&#160;still&#160;&#160;unavoidable&#160;&#160;with&#160;&#160;&#160;multi-input&#160;<br/>transactions,&#160;which&#160;necessarily&#160;reveal&#160;that&#160;their&#160;inputs&#160;were&#160;owned&#160;by&#160;the&#160;same&#160;owner.&#160;&#160;The&#160;risk&#160;<br/>is&#160;that&#160;if&#160;the&#160;owner&#160;of&#160;a&#160;key&#160;is&#160;revealed,&#160;linking&#160;could&#160;reveal&#160;other&#160;transactions&#160;that&#160;belonged&#160;to&#160;<br/>the&#160;same&#160;owner.<br/>
+<b>11.&#160;Calculations</b><br/>
+We&#160;consider&#160;the&#160;scenario&#160;of&#160;an&#160;attacker&#160;trying&#160;to&#160;generate&#160;an&#160;alternate&#160;chain&#160;faster&#160;than&#160;the&#160;honest&#160;<br/>chain.&#160;&#160;Even&#160;if&#160;this&#160;is&#160;accomplished,&#160;it&#160;does&#160;not&#160;throw&#160;the&#160;system&#160;open&#160;to&#160;arbitrary&#160;changes,&#160;such&#160;<br/>as&#160;creating&#160;value&#160;out&#160;of&#160;thin&#160;air&#160;or&#160;taking&#160;money&#160;that&#160;never&#160;belonged&#160;to&#160;the&#160;attacker.&#160;&#160;Nodes&#160;are&#160;<br/>not&#160;going&#160;to&#160;accept&#160;an&#160;invalid&#160;transaction&#160;as&#160;payment,&#160;and&#160;honest&#160;nodes&#160;will&#160;never&#160;accept&#160;a&#160;block&#160;<br/>containing&#160;them.&#160;&#160;&#160;An&#160;attacker&#160;can&#160;only&#160;try&#160;to&#160;change&#160;one&#160;of&#160;his&#160;own&#160;transactions&#160;to&#160;take&#160;back&#160;<br/>money&#160;he&#160;recently&#160;spent.<br/>
+The&#160;race&#160;between&#160;the&#160;honest&#160;chain&#160;and&#160;an&#160;attacker&#160;chain&#160;can&#160;be&#160;characterized&#160;as&#160;a&#160;Binomial&#160;<br/>
+Random&#160;Walk.&#160;&#160;The&#160;success&#160;event&#160;is&#160;the&#160;honest&#160;chain&#160;being&#160;extended&#160;by&#160;one&#160;block,&#160;increasing&#160;its&#160;<br/>lead&#160;by&#160;+1,&#160;and&#160;the&#160;failure&#160;event&#160;is&#160;the&#160;attacker's&#160;chain&#160;being&#160;extended&#160;by&#160;one&#160;block,&#160;reducing&#160;the&#160;<br/>gap&#160;by&#160;-1.<br/>
+The&#160;probability&#160;of&#160;an&#160;attacker&#160;catching&#160;up&#160;from&#160;a&#160;given&#160;deficit&#160;is&#160;analogous&#160;to&#160;a&#160;Gambler's&#160;<br/>
+Ruin&#160;problem.&#160;&#160;Suppose&#160;a&#160;gambler&#160;with&#160;unlimited&#160;credit&#160;starts&#160;at&#160;a&#160;deficit&#160;and&#160;plays&#160;potentially&#160;an&#160;<br/>infinite&#160;number&#160;of&#160;trials&#160;to&#160;try&#160;to&#160;reach&#160;breakeven.&#160;&#160;&#160;We&#160;can&#160;calculate&#160;the&#160;probability&#160;he&#160;ever&#160;<br/>reaches&#160;breakeven,&#160;or&#160;that&#160;an&#160;attacker&#160;ever&#160;catches&#160;up&#160;with&#160;the&#160;honest&#160;chain,&#160;as&#160;follows&#160;[8]:<br/>
+<i>p</i>&#160;=&#160;probability&#160;an&#160;honest&#160;node&#160;finds&#160;the&#160;next&#160;block<br/><i>q</i>&#160;=&#160;probability&#160;the&#160;attacker&#160;finds&#160;the&#160;next&#160;block<br/><i>qz</i>&#160;=&#160;probability&#160;the&#160;attacker&#160;will&#160;ever&#160;catch&#160;up&#160;from&#160;z&#160;blocks&#160;behind<br/>
+<i>q&#160;z</i>={&#160;1&#160;<i>if&#160;p</i>≤<i>q</i>}<br/>
+<i>q&#160;</i>/&#160;<i>p</i><i>z&#160;if&#160;p</i><i>q</i><br/>
+6<br/>
+<hr/>
+<a name=7></a>Given&#160;our&#160;assumption&#160;that&#160;<i>p&#160;&gt;&#160;q</i>,&#160;the&#160;probability&#160;drops&#160;exponentially&#160;as&#160;the&#160;number&#160;of&#160;blocks&#160;the&#160;<br/>attacker&#160;has&#160;to&#160;catch&#160;up&#160;with&#160;increases.&#160;&#160;With&#160;the&#160;odds&#160;against&#160;him,&#160;if&#160;he&#160;doesn't&#160;make&#160;a&#160;lucky&#160;<br/>lunge&#160;forward&#160;early&#160;on,&#160;his&#160;chances&#160;become&#160;vanishingly&#160;small&#160;as&#160;he&#160;falls&#160;further&#160;behind.<br/>
+We&#160;now&#160;consider&#160;how&#160;long&#160;the&#160;recipient&#160;of&#160;a&#160;new&#160;transaction&#160;needs&#160;to&#160;wait&#160;before&#160;being&#160;<br/>
+sufficiently&#160;certain&#160;the&#160;sender&#160;can't&#160;change&#160;the&#160;transaction.&#160;&#160;We&#160;assume&#160;the&#160;sender&#160;is&#160;an&#160;attacker&#160;<br/>who&#160;wants&#160;to&#160;make&#160;the&#160;recipient&#160;believe&#160;he&#160;paid&#160;him&#160;for&#160;a&#160;while,&#160;then&#160;switch&#160;it&#160;to&#160;pay&#160;back&#160;to&#160;<br/>himself&#160;after&#160;some&#160;time&#160;has&#160;passed.&#160;&#160;&#160;The&#160;receiver&#160;will&#160;be&#160;alerted&#160;when&#160;that&#160;happens,&#160;but&#160;the&#160;<br/>sender&#160;hopes&#160;it&#160;will&#160;be&#160;too&#160;late.<br/>
+The&#160;receiver&#160;generates&#160;a&#160;new&#160;key&#160;pair&#160;and&#160;gives&#160;the&#160;public&#160;key&#160;to&#160;the&#160;sender&#160;shortly&#160;before&#160;<br/>
+signing.&#160;&#160;This&#160;prevents&#160;the&#160;sender&#160;from&#160;preparing&#160;a&#160;chain&#160;of&#160;blocks&#160;ahead&#160;of&#160;time&#160;by&#160;working&#160;on&#160;<br/>it&#160;continuously&#160;until&#160;he&#160;is&#160;lucky&#160;enough&#160;to&#160;get&#160;far&#160;enough&#160;ahead,&#160;then&#160;executing&#160;the&#160;transaction&#160;at&#160;<br/>that&#160;moment.&#160;&#160;&#160;Once&#160;the&#160;transaction&#160;is&#160;sent,&#160;the&#160;dishonest&#160;sender&#160;starts&#160;working&#160;in&#160;secret&#160;on&#160;a&#160;<br/>parallel&#160;chain&#160;containing&#160;an&#160;alternate&#160;version&#160;of&#160;his&#160;transaction.<br/>
+The&#160;recipient&#160;waits&#160;until&#160;the&#160;transaction&#160;has&#160;been&#160;added&#160;to&#160;a&#160;block&#160;and&#160;&#160;<i>z</i>&#160;&#160;blocks&#160;have&#160;been&#160;<br/>
+linked&#160;&#160;&#160;after&#160;&#160;&#160;it.&#160;&#160;&#160;&#160;&#160;He&#160;&#160;&#160;doesn't&#160;&#160;&#160;know&#160;&#160;&#160;the&#160;&#160;&#160;exact&#160;&#160;&#160;amount&#160;&#160;&#160;of&#160;&#160;&#160;progress&#160;&#160;&#160;the&#160;&#160;&#160;attacker&#160;&#160;&#160;has&#160;&#160;&#160;made,&#160;&#160;&#160;but&#160;<br/>assuming&#160;the&#160;honest&#160;blocks&#160;took&#160;the&#160;average&#160;expected&#160;time&#160;per&#160;block,&#160;the&#160;attacker's&#160;potential&#160;<br/>progress&#160;will&#160;be&#160;a&#160;Poisson&#160;distribution&#160;with&#160;expected&#160;value:<br/>
+=<i>z&#160;qp</i><br/>
+To&#160;get&#160;the&#160;probability&#160;the&#160;attacker&#160;could&#160;still&#160;catch&#160;up&#160;now,&#160;we&#160;multiply&#160;the&#160;Poisson&#160;density&#160;for&#160;<br/>each&#160;amount&#160;of&#160;progress&#160;he&#160;could&#160;have&#160;made&#160;by&#160;the&#160;probability&#160;he&#160;could&#160;catch&#160;up&#160;from&#160;that&#160;point:<br/>
+∞<br/>
+∑&#160;<i>ke</i>−⋅{<i>q</i>/&#160;<i>p</i><i>z</i>−<i>k</i>&#160;<i>if&#160;k</i>≤<i>z</i>}<br/>
+<i>k</i><br/>
+1<br/>
+<i>if&#160;k</i><br/>
+<i>k</i><br/>
+!<br/>
+&#160;<i>z</i><br/>
+=0<br/>
+Rearranging&#160;to&#160;avoid&#160;summing&#160;the&#160;infinite&#160;tail&#160;of&#160;the&#160;distribution...<br/>
+<i>z</i><br/>
+<i>k&#160;e</i>−<br/>
+1−∑<br/>
+1−<i>q</i>/&#160;<i>p</i><i>z</i>−<i>k</i><br/>
+<i>k</i><br/>
+<i>k</i><br/>
+!<br/>
+=0<br/>
+Converting&#160;to&#160;C&#160;code...<br/>
+#include &lt;math.h&gt;<br/>double AttackerSuccessProbability(double q, int z)<br/>
+{<br/>&#160; &#160; double p = 1.0 - q;<br/>
+&#160; &#160; double lambda = z * (q / p);<br/>&#160; &#160; double sum = 1.0;<br/>
+&#160; &#160; int i, k;<br/>&#160; &#160; for (k = 0; k &lt;= z; k++)<br/>
+&#160; &#160; {<br/>&#160; &#160; &#160; &#160; double poisson = exp(-lambda);<br/>
+&#160; &#160; &#160; &#160; for (i = 1; i &lt;= k; i++)<br/>&#160; &#160; &#160; &#160; &#160; &#160; poisson *= lambda / i;<br/>
+&#160; &#160; &#160; &#160; sum -= poisson * (1 - pow(q / p, z - k));<br/>&#160; &#160; }<br/>
+&#160; &#160; return sum;<br/>}<br/>
+7<br/>
+<hr/>
+<a name=8></a>Running&#160;some&#160;results,&#160;we&#160;can&#160;see&#160;the&#160;probability&#160;drop&#160;off&#160;exponentially&#160;with&#160;z.<br/>
+q=0.1<br/>
+z=0 &#160; &#160;P=1.0000000<br/>z=1 &#160; &#160;P=0.2045873<br/>
+z=2 &#160; &#160;P=0.0509779<br/>z=3 &#160; &#160;P=0.0131722<br/>
+z=4 &#160; &#160;P=0.0034552<br/>z=5 &#160; &#160;P=0.0009137<br/>
+z=6 &#160; &#160;P=0.0002428<br/>z=7 &#160; &#160;P=0.0000647<br/>
+z=8 &#160; &#160;P=0.0000173<br/>z=9 &#160; &#160;P=0.0000046<br/>
+z=10 &#160; P=0.0000012<br/>
+q=0.3<br/>
+z=0 &#160; &#160;P=1.0000000<br/>z=5 &#160; &#160;P=0.1773523<br/>
+z=10 &#160; P=0.0416605<br/>z=15 &#160; P=0.0101008<br/>
+z=20 &#160; P=0.0024804<br/>z=25 &#160; P=0.0006132<br/>
+z=30 &#160; P=0.0001522<br/>z=35 &#160; P=0.0000379<br/>
+z=40 &#160; P=0.0000095<br/>z=45 &#160; P=0.0000024<br/>
+z=50 &#160; P=0.0000006<br/>
+Solving&#160;for&#160;P&#160;less&#160;than&#160;0.1%...<br/>
+P &lt; 0.001<br/>q=0.10 &#160; z=5<br/>
+q=0.15 &#160; z=8<br/>q=0.20 &#160; z=11<br/>
+q=0.25 &#160; z=15<br/>q=0.30 &#160; z=24<br/>
+q=0.35 &#160; z=41<br/>q=0.40 &#160; z=89<br/>
+q=0.45 &#160; z=340<br/>
+<b>12.&#160;Conclusion</b><br/>
+We&#160;have&#160;proposed&#160;a&#160;system&#160;for&#160;electronic&#160;transactions&#160;without&#160;relying&#160;on&#160;trust.&#160;&#160;We&#160;started&#160;with&#160;<br/>the&#160;usual&#160;framework&#160;of&#160;coins&#160;made&#160;from&#160;digital&#160;signatures,&#160;which&#160;provides&#160;strong&#160;control&#160;of&#160;<br/>ownership,&#160;&#160;but&#160;is&#160;&#160;incomplete&#160;&#160;&#160;without&#160;&#160;a&#160;&#160;way&#160;&#160;to&#160;&#160;prevent&#160;double-spending.&#160;&#160;&#160;To&#160;&#160;solve&#160;&#160;this,&#160;&#160;we&#160;<br/>proposed&#160;a&#160;peer-to-peer&#160;network&#160;using&#160;proof-of-work&#160;to&#160;record&#160;a&#160;public&#160;history&#160;of&#160;transactions&#160;<br/>that&#160;&#160;quickly&#160;&#160;becomes&#160;&#160;&#160;computationally&#160;&#160;&#160;impractical&#160;&#160;for&#160;&#160;an&#160;&#160;&#160;attacker&#160;&#160;&#160;to&#160;&#160;&#160;change&#160;&#160;&#160;if&#160;&#160;&#160;honest&#160;&#160;nodes&#160;<br/>control&#160;a&#160;majority&#160;of&#160;CPU&#160;power.&#160;&#160;The&#160;network&#160;is&#160;robust&#160;in&#160;its&#160;unstructured&#160;simplicity.&#160;&#160;Nodes&#160;<br/>work&#160;all&#160;at&#160;once&#160;with&#160;little&#160;coordination.&#160;&#160;They&#160;do&#160;not&#160;need&#160;to&#160;be&#160;identified,&#160;since&#160;messages&#160;are&#160;<br/>not&#160;routed&#160;to&#160;any&#160;particular&#160;place&#160;and&#160;only&#160;need&#160;to&#160;be&#160;delivered&#160;on&#160;a&#160;best&#160;effort&#160;basis.&#160;&#160;Nodes&#160;can&#160;<br/>leave&#160;&#160;&#160;and&#160;&#160;&#160;rejoin&#160;&#160;&#160;the&#160;&#160;&#160;network&#160;&#160;&#160;at&#160;&#160;&#160;will,&#160;&#160;&#160;accepting&#160;&#160;&#160;the&#160;&#160;&#160;proof-of-work&#160;&#160;&#160;chain&#160;&#160;&#160;as&#160;&#160;&#160;proof&#160;&#160;&#160;of&#160;&#160;&#160;what&#160;<br/>happened&#160;while&#160;they&#160;were&#160;gone.&#160;&#160;They&#160;vote&#160;with&#160;their&#160;CPU&#160;power,&#160;expressing&#160;their&#160;acceptance&#160;of&#160;<br/>valid&#160;blocks&#160;by&#160;working&#160;on&#160;extending&#160;them&#160;and&#160;rejecting&#160;invalid&#160;blocks&#160;by&#160;refusing&#160;to&#160;work&#160;on&#160;<br/>them.&#160;&#160;Any&#160;needed&#160;rules&#160;and&#160;incentives&#160;can&#160;be&#160;enforced&#160;with&#160;this&#160;consensus&#160;mechanism.<br/>
+8<br/>
+<hr/>
+<a name=9></a><b>References</b><br/>
+[1]&#160;W.&#160;Dai,&#160;&#34;b-money,&#34;&#160;http://www.weidai.com/bmoney.txt,&#160;1998.<br/>
+[2]&#160;H.&#160;Massias,&#160;X.S.&#160;Avila,&#160;and&#160;J.-J.&#160;Quisquater,&#160;&#34;Design&#160;of&#160;a&#160;secure&#160;timestamping&#160;service&#160;with&#160;minimal&#160;<br/>
+trust&#160;requirements,&#34;&#160;In&#160;<i>20th&#160;Symposium&#160;on&#160;Information&#160;Theory&#160;in&#160;the&#160;Benelux</i>,&#160;May&#160;1999.<br/>
+[3]&#160;S.&#160;Haber,&#160;W.S.&#160;Stornetta,&#160;&#34;How&#160;to&#160;time-stamp&#160;a&#160;digital&#160;document,&#34;&#160;In&#160;<i>Journal&#160;of&#160;Cryptology</i>,&#160;vol&#160;3,&#160;no&#160;<br/>
+2,&#160;pages&#160;99-111,&#160;1991.<br/>
+[4]&#160;D.&#160;Bayer,&#160;S.&#160;Haber,&#160;W.S.&#160;Stornetta,&#160;&#34;Improving&#160;the&#160;efficiency&#160;and&#160;reliability&#160;of&#160;digital&#160;time-stamping,&#34;&#160;<br/>
+In&#160;<i>Sequences&#160;II:&#160;Methods&#160;in&#160;Communication,&#160;Security&#160;and&#160;Computer&#160;Science</i>,&#160;pages&#160;329-334,&#160;1993.<br/>
+[5]&#160;S.&#160;Haber,&#160;W.S.&#160;Stornetta,&#160;&#34;Secure&#160;names&#160;for&#160;bit-strings,&#34;&#160;In&#160;<i>Proceedings&#160;of&#160;the&#160;4th&#160;ACM&#160;Conference&#160;</i><br/>
+<i>on&#160;Computer&#160;and&#160;Communications&#160;Security</i>,&#160;pages&#160;28-35,&#160;April&#160;1997.<br/>
+[6]&#160;A.&#160;Back,&#160;&#34;Hashcash&#160;-&#160;a&#160;denial&#160;of&#160;service&#160;counter-measure,&#34;&#160;<br/>
+http://www.hashcash.org/papers/hashcash.pdf,&#160;2002.<br/>
+[7]&#160;R.C.&#160;Merkle,&#160;&#34;Protocols&#160;for&#160;public&#160;key&#160;cryptosystems,&#34;&#160;In&#160;<i>Proc.&#160;1980&#160;Symposium&#160;on&#160;Security&#160;and&#160;</i><br/>
+<i>Privacy</i>,&#160;IEEE&#160;Computer&#160;Society,&#160;pages&#160;122-133,&#160;April&#160;1980.<br/>
+[8]&#160;W.&#160;Feller,&#160;&#34;An&#160;introduction&#160;to&#160;probability&#160;theory&#160;and&#160;its&#160;applications,&#34;&#160;1957.<br/>
+9<br/>
+<hr/>
+</body>
+</html>

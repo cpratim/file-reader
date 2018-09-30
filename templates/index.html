@@ -1,0 +1,14 @@
+<html>
+  <head>
+    <link rel='stylesheet' href=' {{ url_for('static', filename='main.css') }}'>
+  </head>
+  <body>
+    <center>
+      <form action="{{ url_for('handlefile') }}" method="post" enctype = "multipart/form-data">
+  				<h2>"FILE"</h2>
+  				<input type="file" name="file"><br><br>
+  				<input type="submit" name="submit">
+      </form>
+    </center>
+  </body>
+</html>
